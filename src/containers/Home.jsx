@@ -1,12 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Fragment } from "react";
 
 //Componentes
-import Header from "../components/header";
 import Search from "../components/search";
 import Category from "../components/category";
 import Carrousel from "../components/carrouser";
 import CarrouselItem from "../components/carrouselItem";
-import Footer from "../components/footer";
 
 //Hooks
 import useInitialState from '../hooks/useInitialState';
@@ -16,11 +14,10 @@ const API = 'http://localhost:3000/initalState';
 //Css
 import "../assets/styles/app.scss";
 
-const App = () => {
+const Home = () => {
   const initialState = useInitialState(API);
   return (
-    <div className="app">
-      <Header />
+    <Fragment>
       <Search />
       {initialState.mylist.length > 0 && (
         <Category title="Mi lista">
@@ -50,9 +47,8 @@ const App = () => {
         }
         </Carrousel>
       </Category>
-      <Footer />
-    </div>
+    </Fragment>
   );
 };
 
-export default App;
+export default Home;
