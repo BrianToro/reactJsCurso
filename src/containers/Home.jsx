@@ -9,21 +9,21 @@ import CarrouselItem from "../components/carrouselItem";
 //Hooks
 import useInitialState from '../hooks/useInitialState';
 
-const API = 'http://localhost:3000/initalState';
+//redux
+import { connect } from 'react-redux';
 
 //Css
 import "../assets/styles/app.scss";
 
-const Home = () => {
-  const initialState = useInitialState(API);
+const Home = ({ mylist, trends, originals }) => {
   return (
     <Fragment>
-      <Search />
-      {initialState.mylist.length > 0 && (
+      <Search isHome />
+      {mylist.length > 0 && (
         <Category title="Mi lista">
           <Carrousel>
-            {initialState.mylist.map(item => 
-              <CarrouselItem key={item.id} {...item} />
+            {mylist.map(item => 
+              <CarrouselItem key={item.id} {...item} islist={true} />
             )
             }
           </Carrousel>
@@ -32,7 +32,7 @@ const Home = () => {
 
       <Category title="Tendencias">
         <Carrousel>
-            {initialState.trends.map(item =>
+            {trends.map(item =>
                 <CarrouselItem key={item.id} {...item} />
             )
             }
@@ -41,7 +41,7 @@ const Home = () => {
       </Category>
       <Category title="Originales de platzi">
         <Carrousel>
-        {initialState.originals.map(item => 
+        {originals.map(item => 
             <CarrouselItem key={item.id} {...item}/>
         )
         }
@@ -51,4 +51,12 @@ const Home = () => {
   );
 };
 
-export default Home;
+const mapStateToProps = (state) => {
+  return {
+    mylist: state.mylist,
+    trends: state.trends,
+    originals: state.originals,
+  };
+};
+
+export default connect(mapStateToProps, null)(Home);
