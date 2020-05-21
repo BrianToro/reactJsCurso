@@ -1,32 +1,29 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Fragment } from "react";
 
 //Componentes
-import Header from "../components/header";
 import Search from "../components/search";
 import Category from "../components/category";
 import Carrousel from "../components/carrouser";
 import CarrouselItem from "../components/carrouselItem";
-import Footer from "../components/footer";
 
 //Hooks
 import useInitialState from '../hooks/useInitialState';
 
-const API = 'http://localhost:3000/initalState';
+//redux
+import { connect } from 'react-redux';
 
 //Css
 import "../assets/styles/app.scss";
 
-const App = () => {
-  const initialState = useInitialState(API);
+const Home = ({ mylist, trends, originals }) => {
   return (
-    <div className="app">
-      <Header />
-      <Search />
-      {initialState.mylist.length > 0 && (
+    <Fragment>
+      <Search isHome />
+      {mylist.length > 0 && (
         <Category title="Mi lista">
           <Carrousel>
-            {initialState.mylist.map(item => 
-              <CarrouselItem key={item.id} {...item} />
+            {mylist.map(item => 
+              <CarrouselItem key={item.id} {...item} islist={true} />
             )
             }
           </Carrousel>
@@ -35,7 +32,7 @@ const App = () => {
 
       <Category title="Tendencias">
         <Carrousel>
-            {initialState.trends.map(item =>
+            {trends.map(item =>
                 <CarrouselItem key={item.id} {...item} />
             )
             }
@@ -44,15 +41,22 @@ const App = () => {
       </Category>
       <Category title="Originales de platzi">
         <Carrousel>
-        {initialState.originals.map(item => 
+        {originals.map(item => 
             <CarrouselItem key={item.id} {...item}/>
         )
         }
         </Carrousel>
       </Category>
-      <Footer />
-    </div>
+    </Fragment>
   );
 };
 
-export default App;
+const mapStateToProps = (state) => {
+  return {
+    mylist: state.mylist,
+    trends: state.trends,
+    originals: state.originals,
+  };
+};
+
+export default connect(mapStateToProps, null)(Home);
